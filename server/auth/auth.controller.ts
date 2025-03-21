@@ -10,7 +10,7 @@ export class AuthController {
   async login(@Body() Body: LoginBody) {
     try {
       return this.authService.login(Body);
-    } catch ({ message: error }) {
+    } catch (error) {
       throw new ConflictException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error });
     }
   }
