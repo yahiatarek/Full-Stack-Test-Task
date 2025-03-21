@@ -2,7 +2,6 @@
 const nextConfig = {
     redirects: async () => {
         return [
-          
         ];
       },
 };

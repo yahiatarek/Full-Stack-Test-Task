@@ -1,14 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 
 export default function DashboardPage() {
   const router = useRouter();
+  const token = sessionStorage.getItem('token');
+
+  useEffect(() => {
+    if (!token) {
+      router.push('signin');
+    }
+  }, [token, router]);
 
   const handleLogout = () => {
-    // TODO: Clear session, remove tokens, etc.
-    console.log('User logged out');
+    sessionStorage.removeItem('token');
     router.push('/signin');
   };
 

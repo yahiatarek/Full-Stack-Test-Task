@@ -1,10 +1,12 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { signin } from '../apis/auth';
+import { useRouter } from 'next/navigation';
 
 const signinSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -22,10 +24,23 @@ export default function SigninPage() {
     resolver: zodResolver(signinSchema),
   });
 
-  const onSubmit = (data: SigninFormValues) => {
-    console.log('Sign In Data:', data);
-    // TODO: Call your sign-in API endpoint here.
+  const router = useRouter();
+
+  const onSubmit = async (data: SigninFormValues) => {
+    try {
+      const res = await signin({ email: data.email, password: data.password });
+      if (res.status === 200 && res.accessKey) {
+        router.push('/');
+        sessionStorage?.setItem('token', res.accessKey);
+      }
+      setError('');
+    } catch (err: any) {
+      console.error('Signin failed:', err);
+      setError(err?.message || 'An error occurred');
+    }
   };
+
+  const [error, setError] = useState<string>('');
 
   return (
     <div className="container">
@@ -53,6 +68,7 @@ export default function SigninPage() {
           <span className="link">Sign Up</span>
         </Link>
       </p>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 }

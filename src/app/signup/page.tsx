@@ -1,10 +1,11 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
+import { signup } from '../apis/auth';
 
 const signupSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -30,9 +31,18 @@ export default function SignupPage() {
     resolver: zodResolver(signupSchema),
   });
 
-  const onSubmit = (data: SignupFormValues) => {
-    console.log('Sign Up Data:', data);
-    // TODO: Call your sign-up API endpoint here.
+  const [error, setError] = useState<string>('');
+
+  const onSubmit = async (data: SignupFormValues) => {
+    try {
+      const res = await signup({ email: data.email, password: data.password, name: data.name });
+      console.log('Signup successful:', res);
+      // Handle success, e.g., clear error state or navigate to another page
+      setError('');
+    } catch (err: any) {
+      console.error('Signup failed:', err);
+      setError(err?.message || 'An error occurred');
+    }
   };
 
   return (
@@ -68,6 +78,7 @@ export default function SignupPage() {
           <span className="link">Sign In</span>
         </Link>
       </p>
+      {error && <p className="error">{error}</p>}
     </div>
   );
 }
