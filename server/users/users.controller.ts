@@ -1,7 +1,6 @@
 import { Body, ConflictException, Controller, Get, HttpStatus, Post } from '@nestjs/common';
 
-import { CreateUserDto, LoginBody, UserDataDto } from '../users/dto/users.dto';
-import { UsersService } from './users.service';
+import { UserDataDto } from '../users/dto/users.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller()
