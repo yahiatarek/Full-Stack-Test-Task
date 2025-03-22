@@ -32,7 +32,7 @@ export class AuthService {
 
     const result = {
       ...payload,
-      accessKey: this.jwtService.sign(payload, { secret: 'secret' }),
+      accessKey: this.jwtService.sign(payload, { secret: process.env.JWT }),
     };
     return {
       message: 'User signed in successfully',
@@ -52,7 +52,7 @@ export class AuthService {
 
     const userCreated = await this.userService.create(user);
     const result = {
-      accessKey: this.jwtService.sign(userCreated, { secret: 'secret' }),
+      accessKey: this.jwtService.sign(userCreated, { secret: process.env.JWT }),
       ...userCreated,
     };
     return {

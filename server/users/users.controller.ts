@@ -13,7 +13,7 @@ export class UserController {
   @ApiOperation({ summary: 'get user data' })
   @Post('data')
   async getUserData(@Body() Body: UserDataDto) {
-    const userData = this.jwtService.verify(Body.token, { secret: 'secret' });
+    const userData = this.jwtService.verify(Body.token, { secret: process.env.JWT });
 
     try {
       return JSON.stringify(userData['_doc'].data);
