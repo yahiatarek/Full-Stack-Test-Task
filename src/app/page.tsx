@@ -36,7 +36,7 @@ export default function DashboardPage() {
   return (
     <AuthGuard>
       <div className="container">
-        <h1>{data}</h1>
+        <h1>User data: {data}</h1>
         <button className="logout-button" onClick={handleLogout}>
           Logout
         </button>

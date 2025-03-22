@@ -2,6 +2,7 @@ import { Body, ConflictException, Controller, HttpStatus, Logger, Post } from '@
 
 import { UserDataDto } from '../users/dto/users.dto';
 import { JwtService } from '@nestjs/jwt';
+import { ApiOperation } from '@nestjs/swagger';
 
 @Controller()
 export class UserController {
@@ -9,6 +10,7 @@ export class UserController {
 
   constructor(private readonly jwtService: JwtService) {}
 
+  @ApiOperation({ summary: 'get user data' })
   @Post('data')
   async getUserData(@Body() Body: UserDataDto) {
     const userData = this.jwtService.verify(Body.token, { secret: 'secret' });
