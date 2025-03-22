@@ -4,15 +4,17 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { useUserStore } from '@/store/store';
 import { getUserData } from './apis/auth';
+import AuthGuard from './guards/AuthGuard';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const { setToken, token, setData, data } = useUserStore();
+  const { setData, data } = useUserStore();
+  const token = sessionStorage.getItem('token');
 
   const fetchUserData = useCallback(
     async (token: string) => {
       try {
-        const data = await getUserData(token); // This calls the exported function.
+        const data = await getUserData(token);
         setData(data as unknown as string);
       } catch (err: any) {
         console.error('getting data failed:', err);
@@ -22,21 +24,23 @@ export default function DashboardPage() {
   );
 
   useEffect(() => {
-    fetchUserData(token);
+    if (token) fetchUserData(token);
   }, []);
 
   const handleLogout = () => {
-    setToken('');
+    sessionStorage.removeItem('token');
     setData('');
     router.push('/signin');
   };
 
   return (
-    <div className="container">
-      <h1>{data}</h1>
-      <button className="logout-button" onClick={handleLogout}>
-        Logout
-      </button>
-    </div>
+    <AuthGuard>
+      <div className="container">
+        <h1>{data}</h1>
+        <button className="logout-button" onClick={handleLogout}>
+          Logout
+        </button>
+      </div>
+    </AuthGuard>
   );
 }

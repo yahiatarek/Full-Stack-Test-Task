@@ -2,6 +2,7 @@ import { ConflictException, HttpStatus, Injectable, Logger, NotFoundException } 
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'users/users.service';
 import { CreateUserDto, LoginBody } from 'users/dto/users.dto';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class AuthService {
@@ -14,8 +15,11 @@ export class AuthService {
 
   private async validateUser(userEmail: string, pass: string): Promise<any> {
     const user = await this.userService.findOne(userEmail);
-    if (!user) throw new NotFoundException();
-    if (user.password === pass) {
+    if (!user) throw new NotFoundException('User not found');
+
+    // Compare the provided password with the hashed password
+    const passwordMatch = await bcrypt.compare(pass, user.password);
+    if (passwordMatch) {
       const { password, ...result } = user;
       return result;
     }
@@ -42,10 +46,14 @@ export class AuthService {
       throw new ConflictException('User already exists');
     }
 
+    // Hash the password before saving
+    const saltRounds = 10;
+    user.password = await bcrypt.hash(user.password, saltRounds);
+
     const userCreated = await this.userService.create(user);
     const result = {
       accessKey: this.jwtService.sign(userCreated, { secret: 'secret' }),
-      userCreated,
+      ...userCreated,
     };
     return {
       message: 'User registered successfully',

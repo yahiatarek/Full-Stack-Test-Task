@@ -8,7 +8,7 @@ interface IRoot {
 }
 
 const Root = ({ children }: IRoot) => {
-  return <AuthGuard>{children}</AuthGuard>;
+  return <>{children}</>;
 };
 
 export default Root;

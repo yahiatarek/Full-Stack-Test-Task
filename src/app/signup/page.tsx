@@ -73,7 +73,7 @@ export default function SignupPage() {
           {errors.password && <p className="error">{errors.password.message}</p>}
         </div>
         <div className="form-group">
-          <label htmlFor="password" className="label">
+          <label htmlFor="description" className="label">
             Description:
           </label>
           <textarea id="description" className="text-area" {...register('data')} />

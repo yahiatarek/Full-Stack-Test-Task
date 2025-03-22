@@ -26,14 +26,13 @@ export default function SigninPage() {
   });
 
   const router = useRouter();
-  const { setToken } = useUserStore();
 
   const onSubmit = async (data: SigninFormValues) => {
     try {
       const res = await signin({ email: data.email, password: data.password });
       if (res.status === 200 && res.accessKey) {
         router.push('/');
-        setToken(res.accessKey);
+        sessionStorage.setItem('token', res.accessKey);
       }
       setError('');
     } catch (err: any) {
