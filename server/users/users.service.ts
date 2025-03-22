@@ -17,10 +17,6 @@ export class UsersService {
     return savedUser;
   }
 
-  async findAll() {
-    this.UserModel.deleteMany({ email: 'test@test.com' });
-  }
-
   async findOne(userEmail: string): Promise<User | undefined> {
     return this.UserModel.find({ email: userEmail }).findOne({ email: userEmail });
   }

@@ -1,26 +1,39 @@
 'use client';
 
-import React, { useEffect } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/store';
+import { getUserData } from './apis/auth';
 
 export default function DashboardPage() {
   const router = useRouter();
-  const token = sessionStorage.getItem('token');
+  const { setToken, token, setData, data } = useUserStore();
+
+  const fetchUserData = useCallback(
+    async (token: string) => {
+      try {
+        const data = await getUserData(token); // This calls the exported function.
+        setData(data as unknown as string);
+      } catch (err: any) {
+        console.error('getting data failed:', err);
+      }
+    },
+    [setData]
+  );
 
   useEffect(() => {
-    if (!token) {
-      router.push('signin');
-    }
-  }, [token, router]);
+    fetchUserData(token);
+  }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
+    setToken('');
+    setData('');
     router.push('/signin');
   };
 
   return (
     <div className="container">
-      <h1>Welcome to the application.</h1>
+      <h1>{data}</h1>
       <button className="logout-button" onClick={handleLogout}>
         Logout
       </button>

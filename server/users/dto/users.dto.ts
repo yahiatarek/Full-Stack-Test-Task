@@ -9,6 +9,9 @@ export class CreateUserDto {
 
   @ApiProperty({ required: true, example: 'P@ssw0rd' })
   password: string;
+
+  @ApiProperty({ required: true, example: 'data' })
+  data: string;
 }
 
 export class SetPassword {
@@ -19,9 +22,9 @@ export class SetPassword {
   @ApiProperty({ required: true, example: '01234567891' })
   mobile: string;
 }
-export class SetVerification {
-  @ApiProperty({ required: true, example: '01234567891' })
-  mobile: string;
+export class UserDataDto {
+  @ApiProperty({ required: true, example: 'akjnsdiauhe' })
+  token: string;
 }
 
 export class LoginBody {

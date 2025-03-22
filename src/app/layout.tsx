@@ -1,5 +1,6 @@
 import './globals.css';
 import React from 'react';
+import Root from './root';
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -8,7 +9,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <title>Auth App</title>
       </head>
       <body>
-        <main>{children}</main>
+        <main>
+          <Root>{children}</Root>
+        </main>
       </body>
     </html>
   );

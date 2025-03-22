@@ -7,13 +7,7 @@ import { UsersModule } from 'users/users.module';
 
 @Module({
   controllers: [AuthController],
-  imports: [
-    UsersModule,
-    JwtModule.register({
-      secretOrPrivateKey: 'secret',
-      secret: 'secret',
-    }),
-  ],
+  imports: [UsersModule],
   providers: [AuthService, JwtService, UsersService],
   exports: [],
 })

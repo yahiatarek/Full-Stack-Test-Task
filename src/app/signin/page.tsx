@@ -7,6 +7,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signin } from '../apis/auth';
 import { useRouter } from 'next/navigation';
+import { useUserStore } from '@/store/store';
 
 const signinSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
@@ -25,13 +26,14 @@ export default function SigninPage() {
   });
 
   const router = useRouter();
+  const { setToken } = useUserStore();
 
   const onSubmit = async (data: SigninFormValues) => {
     try {
       const res = await signin({ email: data.email, password: data.password });
       if (res.status === 200 && res.accessKey) {
         router.push('/');
-        sessionStorage?.setItem('token', res.accessKey);
+        setToken(res.accessKey);
       }
       setError('');
     } catch (err: any) {

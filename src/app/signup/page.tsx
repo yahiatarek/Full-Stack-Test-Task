@@ -6,10 +6,12 @@ import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import Link from 'next/link';
 import { signup } from '../apis/auth';
+import { useRouter } from 'next/navigation';
 
 const signupSchema = z.object({
   email: z.string().email({ message: 'Invalid email address' }),
   name: z.string().min(3, { message: 'Name must be at least 3 characters' }),
+  data: z.string().min(20, { message: 'Add something to describe the user' }),
   password: z
     .string()
     .min(8, { message: 'Password must be at least 8 characters' })
@@ -32,12 +34,12 @@ export default function SignupPage() {
   });
 
   const [error, setError] = useState<string>('');
+  const router = useRouter();
 
   const onSubmit = async (data: SignupFormValues) => {
     try {
-      const res = await signup({ email: data.email, password: data.password, name: data.name });
-      console.log('Signup successful:', res);
-      // Handle success, e.g., clear error state or navigate to another page
+      await signup({ email: data.email, password: data.password, name: data.name, data: data.data });
+      router.push('/');
       setError('');
     } catch (err: any) {
       console.error('Signup failed:', err);
@@ -69,6 +71,13 @@ export default function SignupPage() {
           </label>
           <input id="password" type="password" className="input" {...register('password')} />
           {errors.password && <p className="error">{errors.password.message}</p>}
+        </div>
+        <div className="form-group">
+          <label htmlFor="password" className="label">
+            Description:
+          </label>
+          <textarea id="description" className="text-area" {...register('data')} />
+          {errors.data && <p className="error">{errors.data.message}</p>}
         </div>
         <button type="submit">Sign Up</button>
       </form>
