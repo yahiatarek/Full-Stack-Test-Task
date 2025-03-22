@@ -1,10 +1,12 @@
-import { Body, ConflictException, Controller, Get, HttpStatus, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
 
 import { UserDataDto } from '../users/dto/users.dto';
 import { JwtService } from '@nestjs/jwt';
 
 @Controller()
 export class UserController {
+  logger: Logger = new Logger('user service');
+
   constructor(private readonly jwtService: JwtService) {}
 
   @Post('data')

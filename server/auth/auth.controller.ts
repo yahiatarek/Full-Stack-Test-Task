@@ -1,9 +1,10 @@
-import { Body, ConflictException, Controller, HttpStatus, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { CreateUserDto, LoginBody } from '../users/dto/users.dto';
 
 @Controller()
 export class AuthController {
+  logger: Logger = new Logger('auth controller');
   constructor(private authService: AuthService) {}
 
   @Post('signin')

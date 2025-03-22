@@ -1,11 +1,13 @@
 import { Model } from 'mongoose';
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { CreateUserDto } from './dto/users.dto';
 import { User } from './users.model';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Injectable()
 export class UsersService {
+  logger: Logger = new Logger('user service');
+
   constructor(
     @InjectModel('USER_MODEL')
     private UserModel: Model<User>

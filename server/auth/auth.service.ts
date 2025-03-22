@@ -1,7 +1,5 @@
 import { ConflictException, HttpStatus, Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { User } from 'users/users.model';
-import { Model } from 'mongoose';
 import { UsersService } from 'users/users.service';
 import { CreateUserDto, LoginBody } from 'users/dto/users.dto';
 
