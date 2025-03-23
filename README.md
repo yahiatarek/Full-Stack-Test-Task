@@ -2,9 +2,10 @@ This is a [Next.js, Nest js] project
 
 ## Getting Started
 
-First, run the development server:
+First, run the development server and client:
 
 ```bash
+cd frontend
 npm run dev
 cd server
 npm run start
