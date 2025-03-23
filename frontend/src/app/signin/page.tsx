@@ -32,7 +32,9 @@ export default function SigninPage() {
       const res = await signin({ email: data.email, password: data.password });
       if (res.status === 200 && res.accessKey) {
         router.push('/');
-        sessionStorage.setItem('token', res.accessKey);
+        if (typeof window !== 'undefined'){
+          sessionStorage.setItem('token', res.accessKey);
+        }
       }
       setError('');
     } catch (err: any) {

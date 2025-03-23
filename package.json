@@ -1,7 +1,7 @@
 {
   "scripts": {
     "build:frontend": "cd frontend && npm install && npm run build",
-    "build:server": "cd server && npm install && npm run build",
+    "build:server": "cd server && npm install --legacy-peer-deps && npm run build",
     "build": "npm run build:frontend && npm run build:server"
   }
 }

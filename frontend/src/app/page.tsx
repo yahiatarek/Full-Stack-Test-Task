@@ -9,7 +9,9 @@ import AuthGuard from './guards/AuthGuard';
 export default function DashboardPage() {
   const router = useRouter();
   const { setData, data } = useUserStore();
-  const token = sessionStorage.getItem('token');
+  let token = null; 
+  
+  if (typeof window !== 'undefined') {token = sessionStorage.getItem('token');}
 
   const fetchUserData = useCallback(
     async (token: string) => {
@@ -28,7 +30,10 @@ export default function DashboardPage() {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
+    if (typeof window !== 'undefined') {
+      sessionStorage.removeItem('token');
+    }
+
     setData('');
     router.push('/signin');
   };

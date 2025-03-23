@@ -4,7 +4,9 @@ import { useUserStore } from '@/store/store';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const router = useRouter();
-  const token = sessionStorage.getItem('token');
+  let token = null; 
+
+  if (typeof window !== 'undefined') {token = sessionStorage.getItem('token');}
 
   useLayoutEffect(() => {
     if (!token) {
