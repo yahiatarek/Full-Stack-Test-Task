@@ -40,12 +40,11 @@ export const signup = async ({ email, password, name, data }: { email: string; p
 
 export const getUserData = async (token: string) => {
   const response = await fetch(`${BASEURL}/data`, {
-    method: 'POST',
+    method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: token,
+      Authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({ token }),
   });
 
   if (!response.ok) {

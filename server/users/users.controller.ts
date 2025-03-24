@@ -1,8 +1,8 @@
-import { Body, ConflictException, Controller, HttpStatus, Logger, Post } from '@nestjs/common';
+import { Body, ConflictException, Controller, Get, HttpStatus, Logger, Post, Req, UnauthorizedException } from '@nestjs/common';
 
-import { UserDataDto } from '../users/dto/users.dto';
 import { JwtService } from '@nestjs/jwt';
 import { ApiOperation } from '@nestjs/swagger';
+import { Request } from 'express';
 
 @Controller()
 export class UserController {
@@ -11,14 +11,22 @@ export class UserController {
   constructor(private readonly jwtService: JwtService) {}
 
   @ApiOperation({ summary: 'get user data' })
-  @Post('data')
-  async getUserData(@Body() Body: UserDataDto) {
-    const userData = this.jwtService.verify(Body.token, { secret: process.env.JWT });
+  @Get('data')
+  async getUserData(@Req() req: Request) {
+  const authHeader = req.headers.authorization;
+    if (!authHeader) {
+      throw new UnauthorizedException('Authorization header not found');
+    }
 
+      // Expect header to be in the format: "Bearer <token>"
+    const token = authHeader.split(' ')[1] || authHeader;
+    
     try {
+      // Verify and decode the token using your secret
+      const userData = this.jwtService.verify(token, { secret: process.env.JWT });
       return JSON.stringify(userData['_doc'].data);
-    } catch ({ message: error }) {
-      throw new ConflictException({ status: HttpStatus.INTERNAL_SERVER_ERROR, error });
+    } catch (error) {
+      throw new UnauthorizedException('Invalid token');
     }
   }
 }

@@ -14,11 +14,6 @@ export class CreateUserDto {
   data: string;
 }
 
-export class UserDataDto {
-  @ApiProperty({ required: true, example: 'akjnsdiauhe' })
-  token: string;
-}
-
 export class LoginBody {
   @ApiProperty({ required: true, example: `12345678@a` })
   password: string;
